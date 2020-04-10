@@ -1,8 +1,9 @@
 PasswordAuthentication no
 PermitEmptyPasswords no
+Port 2222
 
 Match User root
   AllowTcpForwarding yes
   X11Forwarding no
   AllowAgentForwarding no
-  ForceCommand /bin/false
+
