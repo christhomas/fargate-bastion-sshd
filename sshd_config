@@ -1,6 +1,6 @@
 PasswordAuthentication no
 PermitEmptyPasswords no
-Port 2222
+Port 22
 
 Match User root
   AllowTcpForwarding yes
