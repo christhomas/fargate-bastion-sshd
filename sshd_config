@@ -1,0 +1,8 @@
+PasswordAuthentication no
+PermitEmptyPasswords no
+
+Match User root
+  AllowTcpForwarding yes
+  X11Forwarding no
+  AllowAgentForwarding no
+  ForceCommand /bin/false
