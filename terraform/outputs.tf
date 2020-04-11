@@ -1,5 +1,5 @@
 output "security_group_id" {
-  value = "${length(aws_security_group.load_balancer) == 1 ? aws_security_group.load_balancer[0].id : null}"
+  value = "${length(aws_security_group.bastion) == 1 ? aws_security_group.bastion[0].id : null}"
 }
 
 output "nlb_dns_name" {
@@ -7,5 +7,5 @@ output "nlb_dns_name" {
 }
 
 output "port" {
-  value = "${length(aws_security_group.load_balancer) == 1 ? var.port : null}"
+  value = "${length(aws_security_group.bastion) == 1 ? var.port : null}"
 }
