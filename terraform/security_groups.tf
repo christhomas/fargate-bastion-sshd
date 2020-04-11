@@ -1,5 +1,5 @@
 resource "aws_security_group" "load_balancer" {
-	count = "${var.enable_bastion == 1 ? 1 : 0}"
+	count = "${var.enable_bastion == true ? 1 : 0}"
 
 	name = "${local.lb}"
 	description = "Limits traffic for the ${var.container_name} ECS cluster to the Load Balancer"

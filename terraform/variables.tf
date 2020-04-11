@@ -1,6 +1,6 @@
 variable "enable_bastion" {
   description = "Whether or not to create the necessary resources"
-  default = 0
+  default = false
 }
 
 variable "aws_region" {

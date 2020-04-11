@@ -1,6 +1,6 @@
 
 resource "aws_lb" "bastion" {
-  count = "${var.enable_bastion == 1 ? 1 : 0}"
+  count = "${var.enable_bastion == true ? 1 : 0}"
 
   name                = "${local.lb}"
   load_balancer_type  = "network"
@@ -13,7 +13,7 @@ resource "aws_lb" "bastion" {
 }
 
 resource "aws_lb_listener" "bastion" {
-  count = "${var.enable_bastion == 1 ? 1 : 0}"
+  count = "${var.enable_bastion == true ? 1 : 0}"
 
   depends_on = [
     "aws_lb.bastion",
@@ -31,7 +31,7 @@ resource "aws_lb_listener" "bastion" {
 }
 
 resource "aws_lb_target_group" "bastion" {
-  count = "${var.enable_bastion == 1 ? 1 : 0}"
+  count = "${var.enable_bastion == true ? 1 : 0}"
 
   name        = "${local.lb}"
   port        = "${var.port}"
