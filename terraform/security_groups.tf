@@ -16,7 +16,7 @@ resource "aws_security_group" "bastion" {
 
 resource "aws_security_group_rule" "bastion_ingress" {
 	type = "ingress"
-	security_group_id = "${aws_security_group.bastion.id}"
+	security_group_id = "${aws_security_group.bastion[0].id}"
 	protocol = "tcp"
 	from_port = "${var.port}"
 	to_port = "${var.port}"
@@ -25,7 +25,7 @@ resource "aws_security_group_rule" "bastion_ingress" {
 
 resource "aws_security_group_rule" "bastion_egress" {
 	type = "egress"
-	security_group_id = "${aws_security_group.bastion.id}"
+	security_group_id = "${aws_security_group.bastion[0].id}"
 
 	protocol = "-1"
 	from_port = 0
