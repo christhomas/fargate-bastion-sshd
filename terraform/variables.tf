@@ -1,4 +1,4 @@
-variable "enable_bastion" {
+variable "bastion_enabled" {
   description = "Whether or not to create the necessary resources"
   default = false
 }

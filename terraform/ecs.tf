@@ -15,7 +15,7 @@ data "template_file" "task_template" {
 }
 
 resource "aws_ecs_task_definition" "task_def" {
-  count = "${var.enable_bastion == true ? 1 : 0}"
+  count = "${var.bastion_enabled == true ? 1 : 0}"
 
   family                   = "${var.container_name}"
   execution_role_arn       = "${var.iam_role_ecs_execution.arn}"
@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "task_def" {
 }
 
 resource "aws_ecs_service" "service" {
-  count = "${var.enable_bastion == true ? 1 : 0}"
+  count = "${var.bastion_enabled == true ? 1 : 0}"
 
   name            = "${var.container_name}"
   cluster         = "${var.cluster.id}"
@@ -36,7 +36,7 @@ resource "aws_ecs_service" "service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    security_groups  = ["${aws_security_group.load_balancer[0].id}"]
+    security_groups  = ["${aws_security_group.bastion[0].id}"]
     subnets          = "${var.vpc_subnets}"
     assign_public_ip = true
   }

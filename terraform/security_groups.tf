@@ -1,23 +1,9 @@
-resource "aws_security_group" "load_balancer" {
-	count = "${var.enable_bastion == true ? 1 : 0}"
+resource "aws_security_group" "bastion" {
+	count = "${var.bastion_enabled == true ? 1 : 0}"
 
 	name = "${local.lb}"
 	description = "Limits traffic for the ${var.container_name} ECS cluster to the Load Balancer"
 	vpc_id = "${var.vpc_id}"
-
-	ingress {
-		protocol = "tcp"
-		from_port = "${var.port}"
-		to_port = "${var.port}"
-		cidr_blocks = ["${var.vpc_cidr}"]
-	}
-
-	egress {
-		protocol = "-1"
-		from_port = 0
-		to_port = 0
-		cidr_blocks = ["0.0.0.0/0"]
-	}
 
 	tags = {
 		Name = "${local.lb}"
@@ -28,3 +14,21 @@ resource "aws_security_group" "load_balancer" {
 	}
 }
 
+resource "aws_security_group_rule" "bastion_ingress" {
+	type = "ingress"
+	security_group_id = "${aws_security_group.bastion.id}"
+	protocol = "tcp"
+	from_port = "${var.port}"
+	to_port = "${var.port}"
+	cidr_blocks = ["${var.vpc_cidr}"]
+}
+
+resource "aws_security_group_rule" "bastion_egress" {
+	type = "egress"
+	security_group_id = "${aws_security_group.bastion.id}"
+
+	protocol = "-1"
+	from_port = 0
+	to_port = 0
+	cidr_blocks = ["0.0.0.0/0"]
+}
