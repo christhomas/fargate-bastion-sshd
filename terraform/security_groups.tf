@@ -15,6 +15,8 @@ resource "aws_security_group" "bastion" {
 }
 
 resource "aws_security_group_rule" "bastion_ingress" {
+	count = "${var.bastion_enabled == true ? 1 : 0}"
+
 	type = "ingress"
 	security_group_id = "${aws_security_group.bastion[0].id}"
 	protocol = "tcp"
@@ -24,6 +26,8 @@ resource "aws_security_group_rule" "bastion_ingress" {
 }
 
 resource "aws_security_group_rule" "bastion_egress" {
+	count = "${var.bastion_enabled == true ? 1 : 0}"
+
 	type = "egress"
 	security_group_id = "${aws_security_group.bastion[0].id}"
 
