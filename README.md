@@ -92,7 +92,7 @@ module "bastion" {
     # String: The docker image to deploy
     container_image = "christhomas/fargate-bastion-sshd:latest"
 
-    # String: The port to listen for connectiong on
+    # String: The port to listen for connecting on
     container_port = "22"
 }
 ```
