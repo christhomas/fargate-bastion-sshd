@@ -45,7 +45,7 @@ variable "app_log_stream_prefix" {
 }
 
 variable "app_tags" {
-  type = "map"
+  type = map(string)
   description = "The basic set of tags to attach to all supporting resources"
   default = {}
 }
