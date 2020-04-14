@@ -3,6 +3,21 @@ variable "bastion_enabled" {
   default = false
 }
 
+variable "bastion_debug_keys" {
+  description = "To show the keys that are configured once the users are configured"
+  default = false
+}
+
+variable "bastion_debug_config" {
+  description = "To show the sshd_config written after the entrypoint has computed all the users"
+  default = false
+}
+
+variable "bastion_debug_ssh" {
+  description = "To enable full debugging, although the container will die after one login"
+  default = false
+}
+
 variable "aws_region" {
   description = "The region to deploy the app inside"
 }

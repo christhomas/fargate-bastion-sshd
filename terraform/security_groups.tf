@@ -6,7 +6,7 @@ resource "aws_security_group" "bastion" {
 	vpc_id = "${var.vpc_id}"
 
 	tags = "${concat(var.app_tags, {
-		Name = "${local.load_balancer}"
+		Name = "${var.app_prefix}-${var.container_name}"
 	})}"
 
 	lifecycle {

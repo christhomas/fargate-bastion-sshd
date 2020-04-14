@@ -12,9 +12,9 @@ data "template_file" "task_template" {
     log_prefix  = "${var.app_log_stream_prefix}"
 
     env_bastion_keys  = "${var.vpc_bastion_keys}"
-    env_debug_keys    = "false"
-    env_debug_config  = "false"
-    env_debug_ssh     = "false"
+    env_debug_keys    = "${var.bastion_debug_keys}"
+    env_debug_config  = "${var.bastion_debug_config}"
+    env_debug_ssh     = "${var.bastion_debug_ssh}"
   }
 }
 

@@ -17,6 +17,18 @@ module "bastion" {
     
     # String: The AWS Region. E.g. 'eu-west-1'
     aws_region = "${var.aws_region}"
+
+    ##############################################################################
+    # DEBUGGING FUNCTIONALITY
+    ##############################################################################
+    # Boolean true|false, defaults false. To show the keys that are configured once the users are configured
+    bastion_debug_keys = false
+      
+    # Boolean true|false, defaults false. To show the sshd_config written after the entrypoint has computed all the users
+    bastion_debug_config = false
+      
+    # Boolean true|false, defaults false. To enable full debugging, although the container will die after one login
+    bastion_debug_ssh = false
     
     ##############################################################################
     # BASTION CONFIGURATION
