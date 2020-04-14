@@ -85,7 +85,6 @@ module "bastion" {
     # WARNING: These should be left alone unless you know what you're doing
     # NOTE: You can change these variables if you like, but it's recommended to leave them alone
     # NOTE: If you change the image, you must ensure it functions in a similar way
-    # NOTE: If you change the port, the container must also expose the same port, otherwise you'll never be able to connect
     ##############################################################################
     # String: The container name to create, defaults to 'bastion'
     container_name = "bastion"
