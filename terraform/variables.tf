@@ -45,6 +45,7 @@ variable "app_log_stream_prefix" {
 }
 
 variable "app_tags" {
+  type = "map"
   description = "The basic set of tags to attach to all supporting resources"
   default = {}
 }
@@ -74,7 +75,7 @@ variable "port" {
 
 variable "image" {
   description = "Docker image for the container to run in the ECS cluster"
-  default = "christhomas/fargate-bastion-sshd:no-shell"
+  default = "christhomas/fargate-bastion-sshd:latest"
 }
 
 ////////////////////////////////////////////////////////////

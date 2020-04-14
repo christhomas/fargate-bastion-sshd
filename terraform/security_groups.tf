@@ -5,9 +5,9 @@ resource "aws_security_group" "bastion" {
 	description = "Limits traffic for the ${var.container_name} ECS cluster to the Load Balancer"
 	vpc_id = "${var.vpc_id}"
 
-	tags = "${concat(var.app_tags, {
+	tags = merge(var.app_tags, {
 		Name = "${var.app_prefix}-${var.container_name}"
-	})}"
+	})
 
 	lifecycle {
 		create_before_destroy = true
