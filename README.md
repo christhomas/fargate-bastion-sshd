@@ -26,11 +26,21 @@ module "bastion" {
     
     # String: A custom defined prefix for the load balancer and security group
     # NOTE: Don't make it too long, there are string length limits
-    app_prefix = "${lower(replace(join("-", [var.squad, var.name]), "_", "-"))}"
+    app_prefix = "${var.squad}-${var.end}-${var.name}"
     
-    variable "app_log_group" {
-    variable "app_log_stream_prefix" {
-    variable "app_tags" {
+    # String: A log group that this container will create a log stream under
+    app_log_group = "/aws/ecs/${var.squad}_${var.env}_${var.name}"
+
+    # String: Inside the log group, you must give a prefix for this log stream
+    # NOTE: it'll already include your container_name automatically, so there 
+    #       is no reason to really change this, just leave it alone
+    app_log_stream_prefix = "logs"
+
+    # Map: A map of tags you'd like to apply to some resources which support them, defaults to empty map
+    app_tags = {
+        "squad" = "${var.squad}"
+        "env" = "${var.env}"
+    }
 
     ##############################################################################
     # VPC CONFIGURATION
@@ -49,24 +59,14 @@ module "bastion" {
     
     # String: A ARN of an IAM role that this ecs task can execute under
     iam_role_ecs_execution_arn = "${var.iam_role_ecs_execution.arn}"
-    
-    # String: A log group that this container will create a log stream under
-    log_group = "/aws/ecs/${var.squad}_${var.env}_${var.name}"
-    
-    tags = {
-    squad = "${var.squad}"
-    env = "${var.env}"
-    }
+        
+    # Number: A fargate compatible number of vCPU units
+    # NOTE: the combinations of cpu/memory are fixed, choose compatible values  
+    cpu = 256
 
-    variable "iam_role_ecs_execution_arn" {
-    
-    variable "cpu" {
-    variable "memory" {
-    
-    variable "vpc_subnets" {
-    variable "vpc_id" {
-    variable "vpc_cidr" {
-    variable "vpc_bastion_keys" {
+    # Number: A fargate compatible number of memory units
+    # NOTE: the combinations of cpu/memory are fixed, choose compatible values
+    memory = 512
     
     ##############################################################################
     # CONTAINER VARIABLES
@@ -77,7 +77,11 @@ module "bastion" {
     ##############################################################################
     # String: The container name to create, defaults to 'bastion'
     container_name = "bastion"
+
+    # String: The docker image to deploy
     container_image = "christhomas/fargate-bastion-sshd:latest"
+
+    # String: The port to listen for connectiong on
     container_port = "22"
 }
 ```
@@ -85,10 +89,7 @@ module "bastion" {
 # Environment Variables
 
 #### PUBLIC_KEYS
-A Base64 encoded string containing a json array of public keys, the keys themselves should not be encoded
-
-#### SHELL_ACCESS
-Set to 'true' to enable shell access
+A Base64 encoded string containing a json map of public keys, the keys themselves should not be encoded
 
 #### SHELL_PORT
 Set to a numeric value to change the listening port. E.g: 1234
@@ -99,3 +100,54 @@ Set to 'true' to show the authorized_keys
 #### DEBUG_CONFIG
 Set to 'true' to show the sshd_config file
 
+#### DEBUG_SSH
+Set to 'true' to enable '-ddd' command line option with maximum debugging output, although it'll only allow one login before quitting
+
+# Public Key JSON Data Structure
+
+Here is an example of what the PUBLIC_KEYS value should be
+
+```text
+{
+  "alpha": {
+    "key": "the entire public key here",
+    "shell": true
+  },
+  "omega": {
+    "key": [
+      "another key here",
+      "although this can store multiple keys",
+    ],
+    "shell": false
+  }
+}
+
+```
+
+This entire JSON document should be base64 encoded and stored. A typical example might be:
+
+```
+cat public_keys.json | base64
+```
+
+This simple but effective way to easily store the encoded data without problem of quoting 
+or escapaing allows the container to quickly use the data inside the entrypoint to do the 
+following:
++ Write the basic SSH Configuration
++ Set the appropriate SSH port to listen on
++ Decode the public keys into a json document
++ Loop through all the users in the public keys file
++ For each user, create an account with a random password
++ Write all the keys for each user into the `authorized_keys` file
++ Set all the permissions
++ Enable or disable shell login, depending on the value of the `shell` entry
++ Execute the SSH Daemon
+
+# Logging in to the container
+
+You simply need to execute: `ssh <user>@the_dns_name_of_the_load_balancer.com -p <port>`
+If you have shell access, this will let you into the container, you could run some `apk` commands
+if you need any specific software installed. 
+
+You'll be refused entry unless you're shell access is enabled. If it's disabled. You can still port forward
+to other places, RDS for example.

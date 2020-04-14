@@ -18,6 +18,18 @@
 		{
 			"name": "PUBLIC_KEYS",
 			"value": "${env_bastion_keys}"
+		},{
+			"name": "SHELL_PORT",
+			"value": "${port}"
+		},{
+			"name": "DEBUG_KEYS",
+			"value": "${env_debug_keys}"
+		},{
+			"name": "DEBUG_CONFIG",
+			"value": "${env_debug_config}"
+		},{
+			"name": "DEBUG_SSH",
+			"value": "${env_debug_ssh}"
 		}
 	],
     "portMappings": [

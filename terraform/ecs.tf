@@ -11,7 +11,10 @@ data "template_file" "task_template" {
     log_group   = "${var.app_log_group}"
     log_prefix  = "${var.app_log_stream_prefix}"
 
-    env_bastion_keys   = "${var.vpc_bastion_keys}"
+    env_bastion_keys  = "${var.vpc_bastion_keys}"
+    env_debug_keys    = "false"
+    env_debug_config  = "false"
+    env_debug_ssh     = "false"
   }
 }
 
