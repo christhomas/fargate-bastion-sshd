@@ -9,9 +9,9 @@
     "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/aws/ecs/${log_group}",
+          "awslogs-group": "${log_group}",
           "awslogs-region": "${aws_region}",
-          "awslogs-stream-prefix": "log"
+          "awslogs-stream-prefix": "${log_prefix}"
         }
     },
 	"environment": [

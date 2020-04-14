@@ -6,17 +6,14 @@ RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
 
 RUN echo "root:$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 36 ; echo '')" | chpasswd
 
-COPY sshd_config /etc/ssh/sshd_config
+RUN touch /var/log/btmp
+RUN chmod 600 /var/log/btmp
 
-RUN mkdir ~/.ssh \
-	&& chmod 0700 ~/.ssh \
-	&& touch ~/.ssh/authorized_keys \
-	&& chmod 0600 ~/.ssh/authorized_keys
+RUN ssh-keygen -f /etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
+RUN ssh-keygen -f /etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
-EXPOSE 22
 
 CMD ["/usr/sbin/sshd", "-D", "-e"]
 ENTRYPOINT ["/entrypoint.sh"]

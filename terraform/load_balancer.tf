@@ -2,23 +2,16 @@
 resource "aws_lb" "bastion" {
   count = "${var.bastion_enabled == true ? 1 : 0}"
 
-  name                = "${local.lb}"
+  name                = "${var.app_prefix}-${var.container_name}"
   load_balancer_type  = "network"
   internal            = false
   subnets             = "${var.vpc_subnets}"
 
-  tags = {
-    squad = "${var.squad}"
-  }
+  tags = "${var.app_tags}"
 }
 
 resource "aws_lb_listener" "bastion" {
   count = "${var.bastion_enabled == true ? 1 : 0}"
-
-  depends_on = [
-    "aws_lb.bastion",
-    "aws_lb_target_group.bastion"
-  ]
 
   load_balancer_arn = "${aws_lb.bastion[0].id}"
   port              = "${var.port}"
@@ -33,7 +26,7 @@ resource "aws_lb_listener" "bastion" {
 resource "aws_lb_target_group" "bastion" {
   count = "${var.bastion_enabled == true ? 1 : 0}"
 
-  name        = "${local.lb}"
+  name        = "${var.app_prefix}-${var.container_name}"
   port        = "${var.port}"
   protocol    = "TCP"
   vpc_id      = "${var.vpc_id}"
@@ -45,7 +38,5 @@ resource "aws_lb_target_group" "bastion" {
     port      = "${var.port}"
   }
 
-  tags = {
-    squad = "${var.squad}"
-  }
+  tags = "${var.app_tags}"
 }
