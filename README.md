@@ -3,7 +3,7 @@ A Fargate container to allow SSH access into a VPC to access resources on the pr
 
 # Installing software
 
-Because each user runs as themselves, not run, `su-exec` is here to make sure you can terrify your closest devops by giving yourself a root
+Because each user runs as themselves, not run, `sudo` is here to make sure you can terrify your closest devops by giving yourself a root
 ability to install software.
 
 If you can launch containers into an ECS cluster, you can already launch a root enabled container. So it's not like this is 

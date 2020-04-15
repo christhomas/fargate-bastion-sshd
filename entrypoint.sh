@@ -20,8 +20,11 @@ for user in $(echo "${JSON_KEYS}" | jq -r 'keys[]'); do
   echo "Processing user '${user}'"
 
   echo "Create user and adjust permissions"
-  adduser --disabled-password ${user}
+  adduser --disabled-password --ingroup root ${user}
   echo "${user}:$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 36 ; echo '')" | chpasswd
+
+  echo "Configuring sudo privileges"
+  echo "${user} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
   mkdir /home/${user}/.ssh
   chmod 700 /home/${user}/.ssh
