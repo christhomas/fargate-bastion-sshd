@@ -1,6 +1,14 @@
 # fargate-bastion-sshd
 A Fargate container to allow SSH access into a VPC to access resources on the private subnets configured using environment variables
 
+# Installing software
+
+Because each user runs as themselves, not run, `su-exec` is here to make sure you can terrify your closest devops by giving yourself a root
+ability to install software.
+
+If you can launch containers into an ECS cluster, you can already launch a root enabled container. So it's not like this is 
+worse in a technical sense.
+
 # Terraform
 
 There is a terraform module included with the project. You can instantiate the module and use it like this:
@@ -104,6 +112,7 @@ A Base64 encoded string containing a json map of public keys, the keys themselve
 
 #### SHELL_PORT
 Set to a numeric value to change the listening port. E.g: 1234
+This value will default to: 22
 
 #### DEBUG_KEYS
 Set to 'true' to show the authorized_keys

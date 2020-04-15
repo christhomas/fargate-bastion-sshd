@@ -1,6 +1,6 @@
 FROM alpine
 
-RUN apk add openssh jq
+RUN apk add openssh jq su-exec
 
 RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa
 

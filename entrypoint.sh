@@ -2,7 +2,7 @@
 
 [ -z "${PUBLIC_KEYS}" ] && echo "There are no registered public keys, nobody can ever login, exiting" && exit 1
 
-SHELL_PORT=$(echo ${SHELL_PORT} | sed 's/[^0-9]*//g')
+SHELL_PORT=$(echo ${SHELL_PORT:-22} | sed 's/[^0-9]*//g')
 [ -z "${SHELL_PORT}" ] && echo "The SHELL_PORT variable must contain a numeric value, exiting" && exit 1
 
 echo "Configuring SSH with shell access or just port forwarding"
