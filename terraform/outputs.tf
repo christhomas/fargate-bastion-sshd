@@ -1,11 +1,17 @@
 output "security_group_id" {
-  value = length(aws_security_group.bastion) == 1 ? aws_security_group.bastion[0].id : null
+  value = {
+    for key, value in var.env_list: value => length(aws_security_group.bastion) >= key ? aws_security_group.bastion[key].id : null
+  }
 }
 
 output "host" {
-  value = length(aws_lb.bastion) == 1 ? aws_lb.bastion[0].dns_name : null
+  value = {
+    for key, value in var.env_list: value => length(aws_lb.bastion) >= key ? aws_lb.bastion[key].dns_name : null
+  }
 }
 
 output "port" {
-  value = length(aws_security_group.bastion) == 1 ? var.port : null
+  value = {
+    for key, value in var.env_list: value => length(aws_security_group.bastion) >= key ? var.port : null
+  }
 }
