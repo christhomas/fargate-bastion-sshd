@@ -11,6 +11,11 @@ resource "aws_lb" "bastion" {
 }
 
 resource "aws_lb_listener" "bastion" {
+  depends_on = [
+	aws_lb.bastion,
+	aws_lb_target_group.bastion
+  ]
+
   count = var.enabled == true ? length(var.env_list) : 0
 
   load_balancer_arn = aws_lb.bastion[count.index].id
@@ -24,6 +29,8 @@ resource "aws_lb_listener" "bastion" {
 }
 
 resource "aws_lb_target_group" "bastion" {
+  depends_on = [aws_lb.bastion]
+
   count = var.enabled == true ? length(var.env_list) : 0
 
   name        = "${var.prefix}-${var.env_list[count.index]}"
